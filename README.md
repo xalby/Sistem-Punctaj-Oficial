@@ -1,1 +1,315 @@
-# Sistem-Punctaj-Oficial
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<title>Calculator Punctaj Metin2</title>
+
+<style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #070707, #1a0f0a, #050505);
+  color: #f5f0e6;
+  font-family: Arial, sans-serif;
+  padding: 25px;
+}
+
+.container {
+  max-width: 820px;
+  margin: auto;
+  background: #151515;
+  padding: 30px;
+  border-radius: 18px;
+  border: 2px solid #b8791c;
+  box-shadow: 0 0 25px rgba(255, 170, 40, 0.3);
+}
+
+h1 {
+  text-align: center;
+  color: #ffd36a;
+  text-shadow: 0 0 10px #b8791c;
+}
+
+h2 {
+  color: #ffb84d;
+  background: #2a130c;
+  padding: 10px;
+  border-left: 5px solid #d99a32;
+  border-radius: 8px;
+}
+
+label {
+  display: block;
+  margin-top: 14px;
+  color: #f3d6a2;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #8b5a1f;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+}
+
+button {
+  width: 100%;
+  margin-top: 30px;
+  padding: 16px;
+  background: linear-gradient(#ffd36a, #b8791c);
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  color: #1a0f05;
+}
+
+.result {
+  margin-top: 28px;
+  background: #050505;
+  color: #fff;
+  padding: 22px;
+  border-radius: 14px;
+  border: 1px solid #b8791c;
+  white-space: pre-wrap;
+  font-size: 17px;
+  line-height: 1.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>⚔️ Calculator Punctaj Metin2 ⚔️</h1>
+
+  <h2>🧙 Date caracter</h2>
+
+  <label>Nume caracter</label>
+  <input type="text" id="nume" placeholder="Ex: xAlby">
+
+  <label>Rasă</label>
+  <select id="rasa">
+    <option value="5">Șaman Zmeu</option>
+    <option value="3">Șaman Leac</option>
+    <option value="5">Ninja Arc</option>
+    <option value="4">Ninja Lame</option>
+    <option value="5">War Mental</option>
+    <option value="3">War Aura</option>
+    <option value="4">Sura Arme</option>
+    <option value="2">Sura BM</option>
+  </select>
+
+  <label>Nivel</label>
+  <input type="number" id="nivel" placeholder="Ex: 105">
+
+  <label>PV</label>
+  <input type="number" id="pv" placeholder="Ex: 20000">
+
+  <label>Biolog</label>
+  <select id="biolog">
+    <option value="5">Bio gata</option>
+    <option value="4">Bio 94</option>
+    <option value="3">Bio 92</option>
+    <option value="2">Bio la Însemne</option>
+    <option value="1">Bio la Ramuri roșii</option>
+    <option value="0">Tăblița lui Tugyi</option>
+  </select>
+
+  <label>HH / Semiom</label>
+  <select id="hh">
+    <option value="3">FULL HH</option>
+    <option value="2">Lipsă 5 HH</option>
+    <option value="1">Lipsă 10 HH</option>
+    <option value="-2">Lipsă 15 HH</option>
+  </select>
+
+  <h2>🛡️ Apărări</h2>
+
+  <label>Sabie %</label>
+  <input type="number" id="sabie" placeholder="Ex: 60">
+
+  <label>Mâini %</label>
+  <input type="number" id="maini" placeholder="Ex: 55">
+
+  <label>Pumnal %</label>
+  <input type="number" id="pumnal" placeholder="Ex: 55">
+
+  <label>Săgeți %</label>
+  <input type="number" id="sageti" placeholder="Ex: 64">
+
+  <label>Clopot %</label>
+  <input type="number" id="clopot" placeholder="Ex: 15">
+
+  <label>Magie %</label>
+  <input type="number" id="magie" placeholder="Ex: 55">
+
+  <h2>🔥 Bonus Beta</h2>
+
+  <label><input type="checkbox" class="beta" value="3" data-name="ARMA BETA +9"> Arma Beta +9</label>
+  <label><input type="checkbox" class="beta" value="3" data-name="ARMURA BETA +9"> Armură Beta +9</label>
+  <label><input type="checkbox" class="beta" value="3" data-name="BRATARA BETA +9"> Brățară Beta +9</label>
+  <label><input type="checkbox" class="beta" value="2" data-name="CERCEI BETA +9"> Cercei Beta +9</label>
+
+  <button onclick="calculeaza()">Calculează</button>
+
+  <div id="rezultat" class="result"></div>
+</div>
+
+<script>
+function punctajNivel(nivel) {
+  if (nivel >= 105) return 5;
+  if (nivel >= 98) return 4;
+  if (nivel >= 95) return 3;
+  if (nivel >= 90) return 1;
+  return -2;
+}
+
+function punctajPV(pv) {
+  if (pv >= 22000) return 5;
+  if (pv < 17999) return -1;
+
+  const valori = [
+    { val: 22000, pct: 5 },
+    { val: 21000, pct: 4 },
+    { val: 20000, pct: 3 },
+    { val: 19000, pct: 2 },
+    { val: 18000, pct: 1 }
+  ];
+
+  let apropiat = valori[0];
+
+  valori.forEach(v => {
+    if (Math.abs(pv - v.val) < Math.abs(pv - apropiat.val)) {
+      apropiat = v;
+    }
+  });
+
+  return apropiat.pct;
+}
+
+function punctajAparare(val) {
+  if (val < 49) return -5;
+
+  const valori = [
+    { val: 60, pct: 10 },
+    { val: 55, pct: 8 },
+    { val: 50, pct: 6 }
+  ];
+
+  let apropiat = valori[0];
+
+  valori.forEach(v => {
+    if (Math.abs(val - v.val) < Math.abs(val - apropiat.val)) {
+      apropiat = v;
+    }
+  });
+
+  return apropiat.pct;
+}
+
+function punctajSageti(val) {
+  if (val < 33) return -5;
+
+  const valori = [
+    { val: 65, pct: 15 },
+    { val: 60, pct: 12 },
+    { val: 55, pct: 10 },
+    { val: 50, pct: 8 },
+    { val: 45, pct: 6 },
+    { val: 40, pct: 4 },
+    { val: 34, pct: 0 }
+  ];
+
+  let apropiat = valori[0];
+
+  valori.forEach(v => {
+    if (Math.abs(val - v.val) < Math.abs(val - apropiat.val)) {
+      apropiat = v;
+    }
+  });
+
+  return apropiat.pct;
+}
+
+function punctajClopot(val) {
+  return Math.floor(val / 10);
+}
+
+function punctajMagie(val) {
+  if (val >= 55) return 2;
+  if (val >= 45) return 1;
+  if (val < 44) return -1;
+  return 0;
+}
+
+function calculeaza() {
+  const nume = document.getElementById("nume").value || "Caracter";
+
+  const rasaSelect = document.getElementById("rasa");
+  const rasaText = rasaSelect.options[rasaSelect.selectedIndex].text;
+  const rasa = Number(rasaSelect.value);
+
+  const nivel = Number(document.getElementById("nivel").value) || 0;
+  const pv = Number(document.getElementById("pv").value) || 0;
+
+  const biologSelect = document.getElementById("biolog");
+  const biologText = biologSelect.options[biologSelect.selectedIndex].text;
+  const biolog = Number(biologSelect.value);
+
+  const hhSelect = document.getElementById("hh");
+  const hhText = hhSelect.options[hhSelect.selectedIndex].text;
+  const hh = Number(hhSelect.value);
+
+  const sabie = Number(document.getElementById("sabie").value) || 0;
+  const maini = Number(document.getElementById("maini").value) || 0;
+  const pumnal = Number(document.getElementById("pumnal").value) || 0;
+  const sageti = Number(document.getElementById("sageti").value) || 0;
+  const clopot = Number(document.getElementById("clopot").value) || 0;
+  const magie = Number(document.getElementById("magie").value) || 0;
+
+  let beta = 0;
+  let betaItems = [];
+
+  document.querySelectorAll(".beta:checked").forEach(item => {
+    beta += Number(item.value);
+    betaItems.push(item.dataset.name);
+  });
+
+  const total =
+    punctajNivel(nivel) +
+    biolog +
+    hh +
+    punctajPV(pv) +
+    rasa +
+    beta +
+    punctajAparare(sabie) +
+    punctajAparare(maini) +
+    punctajAparare(pumnal) +
+    punctajSageti(sageti) +
+    punctajClopot(clopot) +
+    punctajMagie(magie);
+
+  const pvFormatat = pv >= 1000 ? Math.round(pv / 1000) + "k" : pv;
+  const betaText = betaItems.length > 0 ? betaItems.join(" / ") : "FĂRĂ BETA";
+
+  document.getElementById("rezultat").innerText =
+`${nume} — ${total} pct
+(${rasaText} | LVL ${nivel} | ~${pvFormatat} PV | ${biologText} | ${sabie} sabie / ${maini} maini / ${pumnal} pumnal / ${sageti} sageti / ${clopot} clopot / ${magie} magie | ${hhText})
+(${betaText})`;
+}
+</script>
+
+</body>
+</html>
